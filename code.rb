@@ -1425,9 +1425,47 @@ library_data = JSON.parse(%q|
 ]
 }
 |)
+# below is used to get today's date as a string
+require 'date'
+class Date
+  def dayname
+     DAYNAMES[self.wday]
+  end
+end
+
+#below is a var of today's week day (only used for the hours)
+today = (Date.today-1).dayname.to_s #I put '.today-1 because it kept giving me the date for tommorrow'
 
 
-puts library_data
+# structure of data
+#entire data(Hash) -> locations an (array) -> (hashes) -> key with value of hash of library data
+
+def get_library_info(week_day,library_data,lib_name)
+    #take name/keyword sort through
+    library_data["locations"].each{ |data_hash|
+       if data_hash["data"]["title"] == lib_name
+            puts "\n#{data_hash["data"]["title"]}"
+            puts "#{data_hash["data"]["phone"]}"
+            puts "#{data_hash["data"]["address"]}"
+            puts
+            if  data_hash["data"][week_day]==""
+                puts "#{data_hash["data"][week_day]}"
+            else 
+               puts data_hash["data"][week_day]
+            end
+       end
+    }
+
+end 
+
+def user_info_request(week_day,library_data)
+    
+    puts "What is the name of the library?"
+    library_name = gets.chomp
+    get_library_info(week_day,library_data,library_name)
+end
+
+user_info_request(today,library_data)
 
 
 
