@@ -1425,6 +1425,7 @@ library_data = JSON.parse(%q|
 ]
 }
 |)
+
 # below is used to get today's date as a string
 require 'date'
 class Date
@@ -1443,8 +1444,8 @@ today = (Date.today-1).dayname.to_s #I put '.today-1 because it kept giving me t
 def get_library_info(week_day,library_data,lib_name)
     #take name/keyword sort through
     library_data["locations"].each{ |data_hash|
-       if data_hash["data"]["title"] == lib_name
-            puts "\n#{data_hash["data"]["title"]}"
+       if data_hash["data"]["title"].include? lib_name
+            puts "#{data_hash["data"]["title"]}"
             puts "#{data_hash["data"]["phone"]}"
             puts "#{data_hash["data"]["address"]}"
             puts
@@ -1459,7 +1460,6 @@ def get_library_info(week_day,library_data,lib_name)
 end 
 
 def user_info_request(week_day,library_data)
-    
     puts "What is the name of the library?"
     library_name = gets.chomp
     get_library_info(week_day,library_data,library_name)
