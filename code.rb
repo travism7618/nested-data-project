@@ -1465,11 +1465,11 @@ def user_info_request(week_day,library_data)
     library_name = gets.chomp
     search_results = get_library_info(week_day,library_data,library_name)
         unless search_results.empty?
-         search_results.each do |library|
-                puts library[:title]
-                puts library[:hone]
-                puts library[:address]
-                puts library[:hours]
+        search_results.each do |library|
+            puts library[:title]
+            puts library[:hone]
+            puts library[:address]
+            puts library[:hours]
             end
         else 
             puts "\n"
