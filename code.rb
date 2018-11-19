@@ -1448,7 +1448,6 @@ def get_library_info(week_day,library_data,lib_name)
             puts "#{data_hash["data"]["title"]}"
             puts "#{data_hash["data"]["phone"]}"
             puts "#{data_hash["data"]["address"]}"
-            puts
             if  data_hash["data"][week_day]==""
                 puts "#{data_hash["data"][week_day]}"
             else 
@@ -1456,7 +1455,6 @@ def get_library_info(week_day,library_data,lib_name)
             end
        end
     }
-
 end 
 
 def user_info_request(week_day,library_data)
