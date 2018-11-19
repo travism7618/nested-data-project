@@ -1462,7 +1462,9 @@ end
 def user_info_request(week_day,library_data)
     puts "What is the name of the library?"
     library_name = gets.chomp
-    get_library_info(week_day,library_data,library_name)
+    if library_name.downcase == library_name.downcase
+        get_library_info(week_day,library_data,library_name)
+    end
 end
 
 user_info_request(today,library_data)
