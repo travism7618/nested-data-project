@@ -1426,7 +1426,7 @@ library_data = JSON.parse(%q|
 }
 |)
 
-# get today's date as a string
+# get the current day of the week as a string
 require 'date'
 class Date
   def dayname
@@ -1434,46 +1434,47 @@ class Date
   end
 end
 
-#var of today's week day (only use for hours)
+#var of today's week day (Only used to get the hours for the current day of the week)
 today = (Date.today).dayname.to_s 
 
 # structure of data
-#entire data(Hash) -> locations (array) -> (hashes) -> library data
+#entire data(Hash) -> locations (array) -> (hashes) -> library data (hash) 
 
-def get_library_info(week_day,library_data,lib_name)
-    #take name/keyword sort through
+def get_library_info(week_day,library_data,lib_name) 
+    #takes name/keyword to sort through data and find more info on libraries that match that name/keyword
     search_results = []
     library_data["locations"].each { |data_hash| #iterate through the list of libraries
-       if (data_hash["data"]["title"]).downcase.include?(lib_name.downcase) #check if the library name matches what the user inputs
-            search_results << { #adds the library info into the array 
+       if (data_hash["data"]["title"]).downcase.include?(lib_name.downcase) #check if the library name of each library hash matches or includes what the user inputs
+            search_results << { #any library with the same name or keyword as the user inputs, has its info put into a hash, and then have that hash shoveled into an array
             "title": "\n#{data_hash["data"]["title"]}",
             "phone": "#{data_hash["data"]["phone"]}",
             "address": "#{data_hash["data"]["address"]}",
-            "hours": if data_hash["data"][week_day] == "" #when the day of the week is closed, the string is ""
+            "hours": if data_hash["data"][week_day] == "" #if the library data has no info on the hours for that day instead of returning hours it returns that it is closed
                 "This library is closed today\n"
-            #return info about library
         else 
+            #if the library isn't closed it returns the hours
             "#{week_day} hours: #{data_hash["data"][week_day]}\n"
         end
             }
-    end
+end
     }
-    search_results
+    search_results #the final thing this method returns is an array of hashes, with each hash being the data of a library that matches what the user was looking for 
 end 
 
 def user_info_request(week_day,library_data)
     puts "What is the name of the library?"
     library_name = gets.chomp
-    search_results = get_library_info(week_day,library_data,library_name) #calling the above method to return info
-    unless search_results.empty? #provide a conditional if the user inputs nothing
-        search_results.each do |library|
+    search_results = get_library_info(week_day,library_data,library_name) #calling the above method to return the info of libraries that match the name the user inputs
+    unless search_results.empty? #if there were no results that matched what the user input then the array the previous method returns would be empty, so if its not empty it returns the information 
+    # iterates through the returned array from last method printing all the info from each hash 
+        search_results.each do |library| 
             puts library[:title]
             puts library[:phone]
             puts library[:address]
             puts library[:hours]
             puts "\n"
         end
-    else 
+    else  #if the array the previous method returned was empty, then no results were found 
         puts "\n"
         puts "Sorry, no results were found, Please try again."
     end
