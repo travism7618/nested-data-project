@@ -1425,6 +1425,7 @@ library_data = JSON.parse(%q|
 ]
 }
 |)
+
 # below is used to get today's date as a string
 require 'date'
 class Date
@@ -1434,7 +1435,7 @@ class Date
 end
 
 #below is a var of today's week day (only used for the hours)
-today = (Date.today-1).dayname.to_s #I put '.today-1 because it kept giving me the date for tommorrow'
+today = (Date.today).dayname.to_s #I put '.today-1 because it kept giving me the date for tommorrow'
 
 
 # structure of data
@@ -1442,27 +1443,41 @@ today = (Date.today-1).dayname.to_s #I put '.today-1 because it kept giving me t
 
 def get_library_info(week_day,library_data,lib_name)
     #take name/keyword sort through
+    search_results=[]
     library_data["locations"].each{ |data_hash|
-       if data_hash["data"]["title"] == lib_name
-            puts "\n#{data_hash["data"]["title"]}"
-            puts "#{data_hash["data"]["phone"]}"
-            puts "#{data_hash["data"]["address"]}"
-            puts
-            if  data_hash["data"][week_day]==""
-                puts "#{data_hash["data"][week_day]}"
+       if (data_hash["data"]["title"]).downcase.include? lib_name.downcase
+            search_results << {
+            "title": "\n#{data_hash["data"]["title"]}",
+            "phone": "#{data_hash["data"]["phone"]}",
+            "address": "#{data_hash["data"]["address"]}",
+            "hours": if data_hash["data"][week_day]==""
+                "This library is closed today\n"
             else 
-               puts data_hash["data"][week_day]
+               "#{week_day} hours: #{data_hash["data"][week_day]}\n"
             end
+            }
        end
     }
-
+        search_results
 end 
 
 def user_info_request(week_day,library_data)
-    
     puts "What is the name of the library?"
     library_name = gets.chomp
-    get_library_info(week_day,library_data,library_name)
+    
+        search_results= get_library_info(week_day,library_data,library_name)
+    unless search_results.empty?
+        search_results.each do |library|
+            puts library[:title]
+            puts library[:phone]
+            puts library[:address]
+            puts library[:hours]
+            puts "\n"
+        end
+    else 
+        puts "\n"
+        puts "Sorry, no results were found, Please try again."
+    end
 end
 
 user_info_request(today,library_data)
