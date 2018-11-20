@@ -1443,33 +1443,29 @@ today = (Date.today).dayname.to_s #I put '.today-1 because it kept giving me the
 
 def get_library_info(week_day,library_data,lib_name)
     #take name/keyword sort through
-    search_results=[]
-    library_data["locations"].each{ |data_hash|
-       if (data_hash["data"]["title"]).downcase.include? lib_name.downcase
+    search_results = []
+    library_data["locations"].each { |data_hash|
+       if (data_hash["data"]["title"]).downcase.include?(lib_name.downcase)
             search_results << {
             "title": "\n#{data_hash["data"]["title"]}",
             "phone": "#{data_hash["data"]["phone"]}",
             "address": "#{data_hash["data"]["address"]}",
-            "hours": if data_hash["data"][week_day]==""
+            "hours": if data_hash["data"][week_day] == "" 
                 "This library is closed today\n"
-
-            else 
-               "#{week_day} hours: #{data_hash["data"][week_day]}\n"
-            end
+        else 
+            "#{week_day} hours: #{data_hash["data"][week_day]}\n"
+        end
             }
-       end
+    end
     }
-        search_results
-
+    search_results
 end 
 
 def user_info_request(week_day,library_data)
     puts "What is the name of the library?"
     library_name = gets.chomp
-    
-        search_results= get_library_info(week_day,library_data,library_name)
+    search_results = get_library_info(week_day,library_data,library_name)
     unless search_results.empty?
-
         search_results.each do |library|
             puts library[:title]
             puts library[:phone]
