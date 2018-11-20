@@ -1426,7 +1426,7 @@ library_data = JSON.parse(%q|
 }
 |)
 
-# below is used to get today's date as a string
+# get today's date as a string
 require 'date'
 class Date
   def dayname
@@ -1434,24 +1434,24 @@ class Date
   end
 end
 
-#below is a var of today's week day (only used for the hours)
-today = (Date.today).dayname.to_s #I put '.today-1 because it kept giving me the date for tommorrow'
-
+#var of today's week day (only use for hours)
+today = (Date.today).dayname.to_s 
 
 # structure of data
-#entire data(Hash) -> locations an (array) -> (hashes) -> key with value of hash of library data
+#entire data(Hash) -> locations (array) -> (hashes) -> library data
 
 def get_library_info(week_day,library_data,lib_name)
     #take name/keyword sort through
     search_results = []
-    library_data["locations"].each { |data_hash|
-       if (data_hash["data"]["title"]).downcase.include?(lib_name.downcase)
-            search_results << {
+    library_data["locations"].each { |data_hash| #iterate through the list of libraries
+       if (data_hash["data"]["title"]).downcase.include?(lib_name.downcase) #check if the library name matches what the user inputs
+            search_results << { #adds the library info into the array 
             "title": "\n#{data_hash["data"]["title"]}",
             "phone": "#{data_hash["data"]["phone"]}",
             "address": "#{data_hash["data"]["address"]}",
-            "hours": if data_hash["data"][week_day] == "" 
+            "hours": if data_hash["data"][week_day] == "" #when the day of the week is closed, the string is ""
                 "This library is closed today\n"
+            #return info about library
         else 
             "#{week_day} hours: #{data_hash["data"][week_day]}\n"
         end
@@ -1464,8 +1464,8 @@ end
 def user_info_request(week_day,library_data)
     puts "What is the name of the library?"
     library_name = gets.chomp
-    search_results = get_library_info(week_day,library_data,library_name)
-    unless search_results.empty?
+    search_results = get_library_info(week_day,library_data,library_name) #calling the above method to return info
+    unless search_results.empty? #provide a conditional if the user inputs nothing
         search_results.each do |library|
             puts library[:title]
             puts library[:phone]
@@ -1480,20 +1480,3 @@ def user_info_request(week_day,library_data)
 end
 
 user_info_request(today,library_data)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
