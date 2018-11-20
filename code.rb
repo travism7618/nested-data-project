@@ -1451,7 +1451,7 @@ def get_library_info(week_day,library_data,lib_name)
             "phone": "#{data_hash["data"]["phone"]}",
             "address": "#{data_hash["data"]["address"]}",
             "hours": if data_hash["data"][week_day]==""
-                "This library is closed today\n"
+                "This library is closed today"
             else 
                "#{week_day} hours: #{data_hash["data"][week_day]}\n"
             end
@@ -1469,9 +1469,10 @@ def user_info_request(week_day,library_data)
     unless search_results.empty?
         search_results.each do |library|
             puts library[:title]
-            puts library[:hone]
+            puts library[:phone]
             puts library[:address]
             puts library[:hours]
+            puts "\n"
         end
     else 
         puts "\n"
